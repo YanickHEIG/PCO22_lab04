@@ -1,25 +1,27 @@
 #!/bin/bash
 
-
-PROJECT_DIR=("code/counter" "code/interlacement" "code/order" "code/timestamps")
-PROJECT_FILE=("counter.pro" "interlacement.pro" "order.pro" "timestamps.pro")
+PROJECT_DIR=code
+REPORT_FILE=rapport.pdf
+PROJECT_FILE=PCO_Labo_2.pro
 ARCHIVE=rendu.tar.gz
 
+if [ ! -d "$PROJECT_DIR" ]
+then
+    echo "Could not find $PROJECT_DIR directory in $(pwd)" >&2
+    exit 1
+fi
 
-for i in "${!PROJECT_DIR[@]}"
-do
-    if [ ! -d "${PROJECT_DIR[i]}" ]
-     then
-        echo "Could not find  directory in ${PROJECT_DIR[i]}" >&2
-       exit 1
-    fi
+if [ ! -f "$REPORT_FILE" ]
+then
+    echo "Could not find $REPORT_FILE directory in $(pwd)" >&2
+    exit 1
+fi
 
-    if [ ! -f "${PROJECT_DIR[i]}/${PROJECT_FILE[i]}" ]
-    then
-        echo "Could not find project file : ${PROJECT_FILE[i]} in $(realpath ${PROJECT_DIR[i]})" >&2
-        exit 1
-    fi
-done
+if [ ! -f "$PROJECT_DIR/$PROJECT_FILE" ]
+then
+    echo "Could not find project file : $PROJECT_FILE in $(realpath $PROJECT_DIR)" >&2
+    exit 1
+fi
 
 echo "The following files are archived in $ARCHIVE : "
-tar --exclude='rendu.tar.gz' --exclude='*.o' --exclude='*.user' -czvf $ARCHIVE code
+tar --exclude='rendu.tar.gz' --exclude='*.o' --exclude='*.user' -czvf $ARCHIVE code $REPORT_FILE
