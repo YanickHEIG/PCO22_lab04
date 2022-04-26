@@ -59,15 +59,36 @@ Pour un train donné, le programme doit représenter de façon spécifique son s
 | L'exécution du programme sur une durée de temps plus conséquente (quelques minutes) ne provoque aucune collision. | OUI                         |
 | Les trains s'arrêtent lorsqu'on clique sur le bouton d'arrêt d'urgence. | OUI                         |
 
-
-
 ## Prog 2
 
 ### Description des fonctionnalités du logiciel
-xxx
+Le programme 2 reprend toutes les fonctionnalités du programme 1. Il y a cependant quelques différences :
+
+- l'accès à la section commune se fait en deux étapes :
+  1. au passage d'un premier capteur, le train émet une requête d'accès pour indiquer son intention d'accéder à la section commune
+  2. au passage d'un deuxième capteur, le train sait s'il peut continuer ou non (dans ce dernier cas, il s'arrête)
+- la priorité d'un train sur l'autre est différente :
+  - priorité au train LA si les deux trains accèdent à la section commune depuis le **même** point d'entrée
+  - priorité au train LB si les deux trains accèdent à la section commune depuis des points d'entrées **distincts**
+
+
 
 ### Choix d'implémentation
-xxx
+Nous nous sommes basés sur l'implémentation du programme 1. Seules les différences principales sont décrites ci-dessous.
+
+#### Synchronisation
+
+- un tableau d'entiers `requests` de taille 2 représente les requêtes en cours des trains
+  - l'indice du tableau désigne le train au moyen d'un cast de l'enum `LocoId`
+  - la valeur à un indice donné représente :
+    - le point d'entrée `EA` (valeur `0`)
+    - le point d'entrée `EB` (valeur `1`)
+    - l'absence de requête (valeur `-1`)
+- un booléen `isLocoWaiting` qui permet d'effectuer un `release()` du sémaphore d'accès à la section commune pour la locomotive en attente de redémarrage (uniquement si cela est nécessaire)
+
+#### Représentation de la section commune
+
+xscsfafdg
 
 ### Tests effectués
 xxxx
