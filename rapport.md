@@ -1,4 +1,4 @@
-# Titre du laboratoire
+# PCO Labo 4 - Petits trains🚅 mignons❤️
 
 **Auteurs :** Emmanuelle Comte, Fabien Terrani, Yanick Thomann
 
@@ -8,11 +8,15 @@
 
 Les `TODO` de la consigne originale ont été conservés afin de facilement retrouver les sections modifiées.
 
-### Parcours choisi pour les trains
+### Parcours choisis pour les trains
 
 ![](img/parcours.png)
 
 ## Prog 1
+
+Voici les capteurs et aiguillages utilisés par notre implémentation :
+
+![](img/capteurs-prog1.png)
 
 ### Description des fonctionnalités du logiciel
 
@@ -38,7 +42,7 @@ Un train voulant accéder à la section commune peut se retrouver dans deux situ
 
 Afin que le train ait le temps de s'arrêter avant de s'engager dans l'aiguillage, la gestion de l'accès se fait à un capteur de distance du dernier capteur avant la section commune.
 
-#### Représentation de la section commune
+#### Représentation de la section commune dans `LocomotiveBehavior`
 
 Pour un train donné, le programme doit représenter de façon spécifique son sens de circulation, la section commune et les capteurs autour de celle-ci (qui diffèrent en fonction du parcours) :
 
@@ -55,13 +59,18 @@ Pour un train donné, le programme doit représenter de façon spécifique son s
 | Laisser tourner les trains pour constater qu'ils font bien deux tours dans le sens horaire, puis deux tours dans le sens anti-horaire, à l'infini. | OUI                         |
 | Arrivée des deux trains dans la section commune depuis **le même côté** simultanément (un train devrait s'arrêter et l'autre passer). | OUI                         |
 | Arrivée des deux trains dans la section commune depuis **les deux côtés** simultanément (un train devrait s'arrêter et l'autre passer). | OUI                         |
-| Arrivée d'un train à la section commune alors que le deuxième train s'y trouve déjà (un train devrait s'arrêter et l'autre passer). | OUI                         |
+| Arrivée d'un train à la section commune alors que le deuxième train s'y trouve déjà (le train qui arrive doit s'arrêter jusqu'à ce que l'autre ait quitté la section commune). | OUI                         |
 | L'exécution du programme sur une durée de temps plus conséquente (quelques minutes) ne provoque aucune collision. | OUI                         |
-| Les trains s'arrêtent lorsqu'on clique sur le bouton d'arrêt d'urgence. | OUI                         |
+| Les trains s'arrêtent lorsqu'on clique sur le bouton d'arrêt d'urgence et ne redémarrent plus (sauf redémarrage du programme). | OUI                         |
 
 ## Prog 2
 
+Voici les capteurs et aiguillages utilisés par notre implémentation :
+
+![](img/capteurs-prog2.png)
+
 ### Description des fonctionnalités du logiciel
+
 Le programme 2 reprend toutes les fonctionnalités du programme 1. Il y a cependant quelques différences :
 
 - l'accès à la section commune se fait en deux étapes :
@@ -70,8 +79,6 @@ Le programme 2 reprend toutes les fonctionnalités du programme 1. Il y a cepend
 - la priorité d'un train sur l'autre est différente :
   - priorité au train LA si les deux trains accèdent à la section commune depuis le **même** point d'entrée
   - priorité au train LB si les deux trains accèdent à la section commune depuis des points d'entrées **distincts**
-
-
 
 ### Choix d'implémentation
 Nous nous sommes basés sur l'implémentation du programme 1. Seules les différences principales sont décrites ci-dessous.
@@ -86,9 +93,22 @@ Nous nous sommes basés sur l'implémentation du programme 1. Seules les différ
     - l'absence de requête (valeur `-1`)
 - un booléen `isLocoWaiting` qui permet d'effectuer un `release()` du sémaphore d'accès à la section commune pour la locomotive en attente de redémarrage (uniquement si cela est nécessaire)
 
-#### Représentation de la section commune
+#### Représentation de la section commune dans `LocomotiveBehavior`
 
-xscsfafdg
+La représentation est très similaire à celle du programme 1. Il y a néanmoins les différences suivantes :
+
+- `capteurTour` a été remplacé par :
+  - `capteurRequeteHoraire` qui correspond au capteur de requête de la donnée (sens horaire)
+  - `capteurRequeteAntiHoraire` qui correspond au capteur de requête de la donnée (sens anti-horaire)
+- Par commodité, nous utilisons désormais `capteurRequeteHoraire` ou `capteurRequeteAntiHoraire` pour compter les tours.
 
 ### Tests effectués
-xxxx
+
+| Résultat attendu                                             | Résultat observé conforme ? |
+| ------------------------------------------------------------ | --------------------------- |
+| Laisser tourner les trains pour constater qu'ils font bien deux tours dans le sens horaire, puis deux tours dans le sens anti-horaire, à l'infini. | OUI                         |
+| Arrivée des deux trains dans la section commune depuis **le même côté** simultanément (la priorité doit être donnée à LA). | OUI                         |
+| Arrivée des deux trains dans la section commune depuis **les deux côtés** simultanément  (la priorité doit être donnée à LB). | OUI                         |
+| Arrivée d'un train à la section commune alors que le deuxième train s'y trouve déjà (le train qui arrive doit s'arrêter jusqu'à ce que l'autre ait quitté la section commune). | OUI                         |
+| L'exécution du programme sur une durée de temps plus conséquente (quelques minutes) ne provoque aucune collision. | OUI                         |
+| Les trains s'arrêtent lorsqu'on clique sur le bouton d'arrêt d'urgence et ne redémarrent plus (sauf redémarrage du programme). | OUI                         |
